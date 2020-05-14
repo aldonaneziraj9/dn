@@ -133,12 +133,11 @@ while answer!=5:
     print ("1.Make changes in the database:")
     print("2.Enter the department name you would like to delete:")
     print("3.Insert records about a new employee:")
-    print("4. Enter customer_id to know the amount in the customer’s account :")
-    print("5.Quit")
+    print("4.Quit")
 
     answer=int(input())
     #If the answer is not one of the options from the menu, then the user will get an error
-    while answer < "0" or answer > "5" : 
+    while answer < "0" or answer > "4" : 
         answer= input ( "You have entered an invalid option. Please select another option :")
 #If answer 1 is chosen, the user will be asked to provide the information he wants to change and the information will then be updated.
     if answer == 1: 
@@ -199,7 +198,7 @@ while answer!=5:
     elif answer== 4 :
         mycursor.execute("DROP DATABASE bank")
         mydb.commmit()
-        print("[5]")
+        print("[4]")
         print("Quitting database...Goodbye:)")
         exit() 
     else:
