@@ -1,0 +1,107 @@
+/*Using  SimpleGeometricObject,
+CirclFromSimpleGeometricObject, RectangleFromSimpleGeometricObject classes, write a class named Triangle that extends SimpleGeometricObject.
+The class contains:
+• Three double data fields named side1, side2, and side3 with default values 1.0 to denote three
+sides of a triangle.
+• A no-arg constructor that creates a default triangle.
+• A constructor that creates a triangle with the specified side1, side2, and side3.
+• The accessor methods for all three data fields.
+• A method named getArea() that returns the area of this triangle.
+• A method named getPerimeter() that returns the perimeter of this triangle.
+• A method named toString() that returns a string description for the triangle in the form: return
+"Triangle: side1 = " + side1 + " side2 = " + side2 + " side3 = " + side3;
+Next, write a test program that prompts the user to enter three sides of the triangle, a color, and a
+Boolean value to indicate whether the triangle is filled. The program should then create a Triangle object
+with these sides and set the color and filled properties using the input values that you receive from the
+user. The program should then display the area, perimeter, color, and true or false to indicate whether it
+is filled or not by calling the appropriate methods */
+
+
+package testtriangle;
+
+class SimpleGeometricObject {
+  private String color = "white";
+  private boolean filled;
+  private java.util.Date dateCreated;
+  
+  /** Construct a default geometric object */
+  public SimpleGeometricObject() {
+    dateCreated = new java.util.Date();
+  }
+
+  /** Construct a geometric object with the specified color 
+    *  and filled value */
+  public SimpleGeometricObject(String color, boolean filled) {
+    dateCreated = new java.util.Date();
+    this.color = color;
+    this.filled = filled;
+  }
+
+  /** Return color */
+  public String getColor() {
+    return color;
+  }
+
+  /** Set a new color */
+  public void setColor(String color) {
+    this.color = color;
+  }
+
+  /** Return filled. Since filled is boolean, 
+     its get method is named isFilled */
+  public boolean isFilled() {
+    return filled;
+  }
+
+  /** Set a new filled */
+  public void setFilled(boolean filled) {
+    this.filled = filled;
+  }
+  
+  /** Get dateCreated */
+  public java.util.Date getDateCreated() {
+    return dateCreated;
+  }
+  
+  /** Return a string representation of this object */
+  public String toString() {
+    return "created on " + dateCreated + "\ncolor: " + color + 
+      " and filled: " + filled;
+  }
+}
+   
+    
+public class testTriangle{
+    public static void main(String[] args){
+       
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter 3 sides of the triangle:");
+        double side1 = input.nextDouble();
+        double side2 = input.nextDouble();
+        double side3 = input.nextDouble();
+        System.out.println("Enter color:");
+        String color = input.next();
+        System.out.println("Is triangle filled:");
+        boolean filled =input.nextBoolean();
+        
+        //create triangle with these sides
+        Triangle tr = new Triangle(side1,side2,side3);
+       
+    
+        //set color and filled properties
+        tr.setColor(color);
+        tr.setFilled(filled);
+        
+        System.out.println("The " +tr.toString());
+        //Area , perimeter, color,T/F for filled 
+        System.out.println("The area is:"+tr.getArea());
+        System.out.println("The perimeter is:"+tr.getPerimeter());
+        System.out.println("The color is:"+tr.getColor());
+        System.out.println("Filled? "+tr.isFilled());
+        System.out.println();
+        
+        
+        
+      }
+        
+ }
