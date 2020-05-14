@@ -108,7 +108,7 @@ public class FinalProject9 {
         List<Department> dept = new ArrayList<>();
 
             //reading info from text files and adding it to corresponding arraylist
-            File file1 = new File("/Users/aldonaneziraj/Desktop/department.txt");
+            File file1 = new File("Path for department.txt");
             Scanner input1 = new Scanner(file1); 
             while (input1.hasNextLine()) {
                 String []info = input1.nextLine().split(",");
@@ -127,7 +127,7 @@ public class FinalProject9 {
 
             //reading info from text files and adding it to corresponding arraylist
        
-            File file2 = new File("/Users/aldonaneziraj/Desktop/instructor.txt");
+            File file2 = new File("Path for instructor.txt");
             Scanner input2 = new Scanner(file2);
             while (input2.hasNextLine()) {
                 String[] info = input2.nextLine().split(",");
