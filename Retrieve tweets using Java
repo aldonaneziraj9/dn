@@ -17,10 +17,8 @@ public class FinalTwitterP {
    cb.setOAuthAccessToken("xxxxxxxxxx");
    cb.setOAuthAccessTokenSecret("xxxxxxxxx");
 
- 
    Twitter twitter = new TwitterFactory(cb.build()).getInstance();
-
-  
+   
    System.out.print("Enter username:");
    String user = input.next();
  
