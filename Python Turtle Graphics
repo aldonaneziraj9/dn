@@ -1,0 +1,32 @@
+''' Write a program that prompts the user to enter the center of a rectangle, width, and height, and displays the rectangle and its area at the center, as shown below:
+Enter the coordinates for the center of the rectangle: 10, 20
+Enter the width of the rectangle: 200
+Enter the height of the rectangle: 100 '''
+
+
+import turtle
+center = eval(input("Enter the coordinates for the center of the rectangle : " ))
+width = eval(input("Enter the width of the rectangle : " ))
+height = eval(input("Enter the height of the rectangle : " ))
+area = width*height
+turtle.showturtle()
+turtle.penup()
+turtle.goto(center)
+turtle.forward(width/2)
+turtle.penup()
+turtle.right(90)
+turtle.pendown()
+turtle.forward(height/2)
+turtle.right(90)
+turtle.forward(width)
+turtle.right(90)
+turtle.forward(height)
+turtle.right(90)
+turtle.forward(width)
+turtle.right(90)
+turtle.forward(height/2)
+turtle.penup()
+turtle.right(90)
+turtle.forward(width/2)
+turtle.hideturtle()
+turtle.write(area)
