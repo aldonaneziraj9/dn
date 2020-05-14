@@ -1,0 +1,68 @@
+//Write a Java program to access Twitter data for a given hashtag and generate a word cloud to show the frequencies of the different words.
+// You will be using a Java API to generate the word cloud.
+
+import java.util.*;
+import java.util.List;
+import com.kennycason.kumo.*;
+import com.kennycason.kumo.bg.*;
+import com.kennycason.kumo.nlp.*;
+import com.kennycason.kumo.palette.*;
+import com.kennycason.kumo.font.scale.*;
+import java.io.*;
+import twitter4j.*;
+import twitter4j.conf.ConfigurationBuilder;
+import org.apache.log4j.BasicConfigurator;
+import java.awt.*;
+//import java.io.FileNotFoundException;
+
+public class aldonastwitter {
+   public static void main(String[] args)
+           throws TwitterException, FileNotFoundException {
+       ConfigurationBuilder cb = new ConfigurationBuilder();
+       cb.setOAuthConsumerKey("xxxxxxxxxx");
+       cb.setOAuthConsumerSecret("xxxxxxxxx");
+       cb.setOAuthAccessToken("xxxxxxxx");
+       cb.setOAuthAccessTokenSecret("xxxxxxxxxx");
+       BasicConfigurator.configure();
+       Twitter twitter = new TwitterFactory(cb.build()).getInstance();
+       uniqueW(twitter);
+   }
+   public static void uniqueW(Twitter twitter)
+           throws TwitterException, FileNotFoundException {
+       Set<String> tweetFile = new HashSet<>();
+       File file1 = new File("/Users/aldonaneziraj/Desktop/wordcloud.txt");
+       Scanner scanner = new Scanner(file1);
+       while(scanner.hasNext())
+           tweetFile.add(scanner.nextLine());
+       Scanner input = new Scanner(System.in);
+       System.out.print("Enter #hashtag: ");
+       String hashtag = input.nextLine();
+       Query query = new Query(hashtag);
+
+       QueryResult result = twitter.search(query);
+       ArrayList<String> tweets = new ArrayList<>();
+       for (Status status : result.getTweets()) {
+           tweets.addAll(Collections.singleton(status.getText()));
+}
+       wordCloud(tweets,tweetFile);
+   }
+
+   public static void wordCloud(ArrayList<String> tweets, Set<String> tweetFile) {
+       final FrequencyAnalyzer frequencyAnalyzer = new FrequencyAnalyzer();
+       final List<WordFrequency> wordFrequencies = frequencyAnalyzer.load(tweets);
+       final Dimension dimension = new Dimension(600, 600);
+       final WordCloud wordCloud = new WordCloud(dimension, CollisionMode.RECTANGLE);
+       wordCloud.setPadding(0);
+       wordCloud.setBackground(new RectangleBackground(dimension));
+       wordCloud.setColorPalette(new ColorPalette(Color.PINK, Color.WHITE, Color.RED, Color.WHITE));
+       wordCloud.setFontScalar(new LinearFontScalar(20, 49));
+       wordCloud.build(wordFrequencies);
+       wordCloud.writeToFile("/Users/aldonaneziraj/Desktop/wordcloud2.png");
+       }
+   }
+
+
+
+
+
+
