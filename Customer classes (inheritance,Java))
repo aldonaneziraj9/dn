@@ -1,0 +1,216 @@
+
+/* 
+Design a class named Person with fields for holding a person’s name, address, and telephone
+number. The class should have the following:
+ The no-arg constructor that initializes the object with empty strings for name, address,
+and phone.
+ A constructor that initializes the object with a name, address, and a phone number.
+ All appropriate mutator and accessor methods for the class’s fields.
+Next, design a class named Customer, which extends the Person class. The Customer class
+should have a field for a customer number and a Boolean field indicating whether the customer
+wishes to be on a mailing list. The class should also have the following:
+ The no-arg constructor that initializes the object with empty strings for name, address,
+phone, and customerNumber. The mailingList field is set to false.
+ Another constructor that initializes the object with a name, address, a phone number, a
+customer number, and mailing list status.
+ All appropriate mutator and accessor methods for the class’s fields.
+Now, design a class named PreferredCustomer, which extends the Customer class. The
+PreferredCustomer class should have fields for the amount of the customer’s purchases and the
+customer’s discount level. The amount of a customer’s discount is determined by the amount of
+the customer’s cumulative purchases in the store as follows:
+ When a preferred customer spends $500, he or she gets a 5 percent discount on all future
+purchases.
+ When a preferred customer spends $1,000, he or she gets a 6 percent discount on all
+future purchases.
+ When a preferred customer spends $1,500, he or she gets a 7 percent discount on all
+future purchases.
+ When a preferred customer spends $2,000 or more, he or she gets a 10 percent discount
+on all future purchases.
+The class should also have the following:
+ The no-arg constructor that initializes the object with empty strings for name, address,
+phone, and customerNumber. The mailingList field is set to false. The purchases and
+discountLevel fields are set to 0.0.
+ Another constructor that initializes the object with a name, address, a phone number, a
+customer number, mailing list status, and amount of purchases.
+ All appropriate mutator and accessor methods for the class’s fields.
+Use the following main method in your Test class and to get a screenshot of the output:
+*/
+
+
+
+
+package assignmentch11;
+
+class Person{
+    String name; 
+    String address;
+    String phone_no;
+
+
+    public Person(){   
+       name =" ";
+       address=" ";
+       phone_no=" ";
+       
+   }
+    
+    public Person(String name,String address,String phone_no){
+        this.name=name;
+        this.address=address;
+        this.phone_no=phone_no;
+    }
+    
+    public void setName(String name){
+        this.name=name;
+    }
+    public String getName(){
+        return name;
+    }
+    
+    public void setAddress(String address){
+        this.address=address;
+    }
+    public String getAddress(){
+        return address;
+    }
+    
+    
+    
+    public void setPhone_no(String phone_no){
+        this.phone_no=phone_no;
+    }
+    public String getPhone_no(){
+        return phone_no;
+    }
+}
+    
+    
+    
+    
+    
+
+
+class Customer 
+    extends Person {
+    private String customerNumber;
+    boolean mailingList;
+    
+
+public Customer(){
+        super(); 
+        customerNumber=" ";
+        boolean mailingList=false;
+    }
+    
+public Customer(String name,String address, String phone_no,String customerNumber,boolean mailingList){
+    super (name,address,phone_no);
+    this.customerNumber=customerNumber;
+    this.mailingList=mailingList;
+}
+   
+public void setCustomerNumber(String customerNumber){
+        this.customerNumber=customerNumber;
+    }
+public String getCustomerNumber(){ 
+    return customerNumber;
+    }
+    
+
+public void setMailingList(boolean mailingList){
+        this.mailingList=mailingList;
+    }
+public boolean getMailingList(){
+    return mailingList;
+    }
+      
+    
+}    
+   
+
+    
+    
+class PreferredCustomer
+    extends Customer{
+    double purchases;
+    double discount_level;
+    
+public PreferredCustomer(){
+    super();
+  
+  purchases =0.0;
+  discount_level=0.0;
+  mailingList=false;
+  
+}
+    
+public PreferredCustomer(String name,String address, String phone_no,String customerNumber,boolean mailingList,double purchases){
+    super(name,address,phone_no,customerNumber,mailingList);
+    
+    this.purchases=purchases;
+   
+  
+     if(purchases >= 500 && purchases <1000)
+        setDiscountLevel(0.05);
+    else if(purchases >= 1000 && purchases <1500)
+        setDiscountLevel(0.06);
+    else if(purchases >= 1500 && purchases <2000)
+        setDiscountLevel(0.07);
+    else if(purchases >= 2000)
+        setDiscountLevel(0.10);
+    
+
+    
+}
+
+public void setPurchases(double purchases){
+    this.purchases=purchases;
+}
+public double getPurchases(){
+    return purchases;
+}    
+
+public void setDiscountLevel(double discount_level){
+   this.discount_level=discount_level;
+  
+   
+    
+   
+}
+public double getDiscountLevel(){
+    return discount_level;
+}    
+
+
+}
+
+public class AssignmentCh11{
+    public static void main(String[] args) {
+Customer myCustomer = new Customer("Julie James", "123 Main Street", "555-1212", "147-A049", true);
+
+System.out.println("Name: " + myCustomer.getName()); 
+System.out.println("Address: " + myCustomer.getAddress()); System.out.println("Telephone: " + myCustomer.getPhone_no());
+System.out.println("Customer Number: " + myCustomer.getCustomerNumber());
+if (myCustomer.getMailingList())
+    System.out.println("Mailing List: YES");
+ else
+    System.out.println("Mailing List: NO");
+PreferredCustomer myPCustomer = new PreferredCustomer("Julie James", "123 Main Street", "555-1212", "147-A049", true, 1750.00);
+
+System.out.println("Name: " + myPCustomer.getName()); 
+System.out.println("Address: " + myPCustomer.getAddress());
+System.out.println("Telephone: " + myPCustomer.getPhone_no());
+System.out.println("Customer Number: " + myPCustomer.getCustomerNumber()); 
+if (myPCustomer.getMailingList())
+    System.out.println("Mailing List: YES"); 
+else
+    System.out.println("Mailing List: NO");
+System.out.println("Purchases: $" + myPCustomer.getPurchases());
+System.out.println("Discount level: " + myPCustomer.getDiscountLevel());
+}
+}    
+
+
+
+
+
+
