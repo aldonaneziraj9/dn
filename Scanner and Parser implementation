@@ -1,0 +1,283 @@
+'''Implement a token scanner and predictive parser in Python'''  
+
+
+#Scanner
+
+tinyc = open(" ", "r") #Opens file and reads it. Add file path between the double quotes.
+output = open(" ", "w") #Opens file and writes to it. Add file path between the double quotes.
+output.truncate(0) #Removes the contents of the token file for each run
+
+with tinyc as f:
+    tinyCfile = f.read().splitlines() #Splits the file lines into a list
+    
+#Symbols and Operators
+LP = "("
+RP = ")"
+ASGN = "="
+SC = ";"
+ADD = "+"
+SUB = "-"
+COMPARE = "<" or ">"
+
+#Keywords
+IF = "if"
+THEN = "then"
+ELSE = "else"
+WHILE = "while"
+DO = "do"
+
+tinyCList = [] #New list
+
+length =(len(tinyCfile)) #Length of the list
+
+for i in range(0, length, +1): #Outer for loop that iterates in a specific range
+    for x in range(len(tinyCfile[i])): #Inner for loop that iterates over characters position at a specific index
+        tinyCList.append(tinyCfile[i][x])
+m = 0 #Counter
+while m < len(tinyCList):
+    if tinyCList[m] >= 'a' and tinyCList[m] <= 'z': #Checks if it's a valid character
+     #Checks if keyword is WHILE
+         if tinyCList[m] == 'w' and tinyCList[m+1] == 'h' and tinyCList[m+2] == 'i':
+             output.write("WHILE: "+"\""+WHILE+"\"\n")
+             m += 5
+             continue
+     #Checks if keyword is DO
+         elif tinyCList[m] == 'd' and tinyCList[m+1] == 'o':
+             output.write("DO: "+"\""+DO+"\"\n")
+             m += 2
+             continue
+     #Checks if keyword is ELSE
+         elif tinyCList[m] == 'e' and tinyCList[m+1] == 'l' and tinyCList[m+2] == 's':
+             output.write("ELSE: "+"\""+ELSE+"\"\n")
+             m += 4
+             continue
+     #Checks if keyword is IF
+         elif tinyCList[m] == 'i' and tinyCList[m+1] == 'f':
+             output.write("IF: "+"\""+IF+"\"\n")
+             m += 2
+             continue
+     #Checks if keyword is THEN
+         elif tinyCList[m] == 't' and tinyCList[m+1] == 'h' and tinyCList[m+2] == 'e' and tinyCList[m+3] == 'n':
+             output.write("THEN: "+"\""+THEN+"\"\n")
+             m += 4
+             continue
+     #Checks for identifier
+         else:
+             output.write("id: "+"\""+tinyCList[m]+"\"\n")
+             m += 1
+             continue
+
+            
+    #Checks for numbers
+    elif tinyCList[m] >= "0" and tinyCList[m] <= '9':
+        output.write("num: "+"\""+tinyCList[m])
+        m += 1
+        while tinyCList[m] >= "0" and tinyCList[m] <= '9':
+            output.write(tinyCList[m])
+             m += 1
+             output.write("\"\n")
+             continue
+    elif tinyCList[m] == LP: #Checks if the symbol is LP
+        output.write("LP: "+ "\""+tinyCList[m]+"\"\n")
+        m += 1
+        continue
+    elif tinyCList[m] == RP: #Checks if the symbol is RP
+         output.write("RP: "+"\""+tinyCList[m]+"\"\n")
+         m += 1
+         continue
+    elif tinyCList[m] == ASGN: #Checks if the symbol is ASGN
+         output.write("ASGN: "+"\""+tinyCList[m]+"\"\n")
+         m += 1
+         continue
+    elif tinyCList[m] == SC: #Checks if the symbol is SC
+         output.write("SC: "+"\""+tinyCList[m]+"\"\n")
+         m += 1
+         continue
+    elif tinyCList[m] == ADD: #Checks if the operator is ADD
+         output.write("ADD: ""\""+tinyCList[m]+"\"\n")
+         m += 1
+         continue
+    elif tinyCList[m] == SUB: #Checks if the operator is SUB
+         output.write("SUB: ""\""+tinyCList[m]+"\"\n")
+         m += 1
+         continue
+    elif tinyCList[m] == COMPARE: #Checks if the operator is COMPARE
+         output.write("COMPARE: "+"\""+tinyCList[m]+"\"\n")
+         m += 1
+         continue
+    elif tinyCList[m] == ' ': #Ignores whitespace
+         m += 1
+         continue
+    else:
+         output.truncate(0)
+         output.write("LEXICAL_ERROR") #Lexical error if none of the above if
+        statements are correct
+    break
+#Closes both files
+tinyc.close()
+output.close()
+
+
+
+#Parser
+#We assumed that the input is a list of tokens from the scanner. Change this for different tests.
+input = ["id", "ASGN", "num", "SC", "WHILE", "LP", "id", "COMP", "num", "RP", "id", "ASGN", "id", "ADD", "id", "SC"]
+
+#takes the list of tokens and reverses it so it goes in the stack in the correct order
+inputStack = list(reversed(input))
+
+#creates a “stack” and adds $ and starting symbol
+stack = []
+stack.append("$")
+stack.append("<program>")
+
+
+
+#Parse Tree function that takes two parameters. Parameter x is the top of stack. Parameter y is top of inputStack.
+def PT(x, y):
+    if(x == "<program>" and (y == "id" or y == "SC" or y == "WHILE" or y == "DO" or y == "IF" or y == "$")):
+        return "<statement_list>"
+
+
+    
+    elif(x == "<statement_list>" and (y == "id" or y == "SC" or y == "WHILE" or y == "DO" or y == "IF")):
+        return "<statement> SC <statement_list>"
+    
+    elif(x == "<statement_list>" and (y == '$')):
+        return "ε"
+
+
+
+    elif(x == "<statement>" and (y == "id")):
+        return "id ASGN <expr>"
+    
+    elif(x == "<statement>" and (y == "SC")):
+        return "SC"
+
+    elif(x == "<statement>" and (y == "WHILE")):
+        return "WHILE <paren_expr> <statement>"
+
+    elif(x == "<statement>" and (y == "DO")):
+        return "DO <statement> WHILE <paren_expr>"
+
+    elif(x == "<statement>" and (y == "IF")):
+        return "IF <paren_expr> <statement>"
+    
+
+
+    elif(x == "<paren_expr>" and (y == "LP")):
+        return "LP <expr> RP"
+
+
+
+    elif(x == "<expr>" and (y == "num" or y == "id" or y == "LP")):
+        return "<test>"
+
+
+
+    elif(x == "<test>" and (y == "num" or y == "id" or y == "LP")):
+        return "<sum> <test_opt>"
+
+
+
+    elif(x == "<test_opt>" and (y == "RP" or y == "SC" or y == "WHILE")):
+        return "ε"
+
+    elif(x == "<test_opt>" and (y == "COMP")):
+        return "COMP <sum>"
+
+
+
+    elif(x == "<sum>" and (y == "num" or y == "id" or y == "LP")):
+        return "<term> <sum_opt>"
+
+
+
+    elif(x == "<sum_opt>" and (y == "COMP" or y == "RP" or y == "SC" or y == "WHILE")):
+        return "ε"
+
+    elif(x == "<sum_opt>" and (y == "SUB")):
+        
+        return "SUB <term> <sum_opt>"
+
+    elif(x == "<sum_opt>" and (y == "ADD")):
+        return "ADD <term> <sum_opt>"
+
+
+
+    elif(x == "<term>" and (y == "num")):
+        return "num"
+
+    elif(x == "<term>" and (y == "id")):
+        return "id"
+
+    elif(x == "<term>" and (y == "LP")):
+        return "<paren_expr>"
+
+
+ 
+    else:
+        return "syntax_error()"
+
+  
+
+list1 = []
+
+#While loop keeps iterating until inputStack is empty and if a syntax_error () occurs
+while(inputStack != [] and stack[-1] != "syntax_error()"):
+    list1.append(stack[-1])
+    
+    ## Pops the top of both stacks if the elements are the same
+    if(stack[-1] == inputStack[-1]):
+        inputStack.pop()
+        stack.pop()
+    
+    elif((stack[-1] == "LP" or stack[-1] == "RP" or stack[-1] == "ASGN" or
+          stack[-1] == "SC" or stack[-1] == "ADD" or stack[-1] == "SUB" or
+          stack[-1] == "COMP" or stack[-1] == "IF" or stack[-1] == "THEN" or
+          stack[-1] == "WHILE" or stack[-1] == "DO" or stack[-1] == "num" or
+          stack[-1] == "id")
+         and (inputStack[-1] == "LP" or inputStack[-1] == "RP" or
+              inputStack[-1] == "ASGN" or inputStack[-1] == "SC" or
+              inputStack[-1] == "ADD" or inputStack[-1] == "SUB" or
+              inputStack[-1] == "COMP" or inputStack[-1] == "IF" or
+              inputStack[-1] == "THEN" or inputStack[-1] == "WHILE" or
+              inputStack[-1] == "DO" or inputStack[-1] == "num" or inputStack[-1] == "id")):
+        inputStack.pop()
+        stack.pop()
+ 
+    else:
+        action = PT(x = stack[-1], y = inputStack[-1]) #Calls Parse Tree function and returns string.
+        action = action.split() #Splits string into a List based on spaces.
+        action = list(reversed(action)) #Reverses List of string.
+        stack.pop() #Pops top of stack.
+
+       #Reversed List of string from Parse Tree function is appended to top of stack.
+        for x in action:
+            stack.append(x)
+
+       #If the top of stack is “ε” pop top element of stack.
+        if(stack[-1] == "ε"):
+            stack.pop()
+
+list1.append(stack[-1])
+
+#print(list1)
+
+if "syntax_error()" in list1:
+    print ("syntax_error()")
+else:
+    for x in list1:
+        print (x)
+
+
+
+
+
+
+
+
+
+
+
+
