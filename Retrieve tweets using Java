@@ -1,0 +1,41 @@
+//Write a Java program that gets the most recent tweets of specific a user.
+package finaltwitterp;
+import twitter4j.*;
+import java.util.*;
+import twitter4j.conf.*;
+
+
+public class FinalTwitterP {
+
+   public static void main(String[] a) {
+
+   Scanner input = new Scanner(System.in);
+
+   ConfigurationBuilder cb = new ConfigurationBuilder();
+   cb.setOAuthConsumerKey("xxxxxxxxxx");
+   cb.setOAuthConsumerSecret("xxxxxxxxxx");
+   cb.setOAuthAccessToken("xxxxxxxxxx");
+   cb.setOAuthAccessTokenSecret("xxxxxxxxx");
+
+ 
+   Twitter twitter = new TwitterFactory(cb.build()).getInstance();
+
+  
+   System.out.print("Enter username:");
+   String user = input.next();
+ 
+    List<Status> tweets = null;
+   try {
+       tweets = twitter.getUserTimeline(user);
+       System.out.println("Printing out tweets:");
+   } catch (TwitterException e) {
+     
+      System.out.println("You have entered an incorrect username");
+   }
+  
+  
+   for (Status status : tweets) {
+                   System.out.println(status.getUser().getScreenName()+"\n "+ status.getText());
+          }       
+}}
+
