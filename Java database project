@@ -1,0 +1,283 @@
+//Aldona Neziraj
+/*There are two text files with the following information stored in them:
+The instructor.txt file where each line stores the id, name and affiliated department of an instructor separated by a comma
+The department.txt file where each line stores the name, location and budget of the department separated by a comma
+You need to write a Java program that reads these text files and provides user with the following menu:
+1. Enter the instructor ID and I will provide you with the name of the instructor, affiliated department and the location of that department.
+2. Insert a record about a new instructor.
+3. Exit
+The above menu should continue to be displayed in a loop until the user selects option 3.
+When the user selects option 1 above, the following should be displayed:
+Enter the instructor ID:
+If the user enters an instructor id that is not present in the text file, display "The ID doesnot appear in the file.", otherwise, display the name of the instructor, affiliated department and the location of that department.
+If the user selects option 2 above, display the following:
+Enter the instructor id:
+Enter the instructor name:
+Enter the affiliated department name:
+Once the user enters the above information, write the information in the instructor file only if the following two conditions are met: 1. The department already exists in the department file. If not, display "The department doesnot exist and hence the instructor record cannot be added to the file". 2. The instructor id should not already be present in the file. If so, display "Instructor id already exists in the file"
+*/
+
+package finalproject9;
+
+import java.io.*; // import this package to use the file reader and writer 
+import java.util.*; //import this package to use it for the input, arrayLists etc
+
+//instructor class with fields that correspond to the instructor text file
+class Instructor {
+    public int id;
+    public String name;
+    public String department;
+//constructor
+    public Instructor(int id,String name,String department){
+        this.id=id;
+        this.name=name;
+        this.department=department;
+    }
+    //accessors and mutators
+    public void setId(int id){
+        this.id=id;
+    }
+    public int getId(){
+        return id;
+    }
+     
+    public void setName(String name){
+        this.name=name;
+    }
+     public String getName(){
+        return name;
+    }
+    
+    public void setDept(String department){
+        this.department=department;
+    }
+    public String getDept(){
+        return department;
+    }
+     
+     
+     
+}
+
+// Department class with fields corresponding to the department text file
+class Department{
+     String d_name; 
+     String location;
+     double budget;
+    //constructor
+    public Department(String d_name,String location,double budget){
+        this.d_name=d_name;
+        this.location=location;
+        this.budget=budget;
+    }
+    
+
+     //accessors and mutators
+    public void setd_Name(String d_name){
+        this.d_name=d_name;
+    }
+     public String getd_Name(){
+        return d_name;
+    }
+    
+    public void setLocation(String location){
+        this.location=location;
+    }
+    public String getLocation(){
+        return location;
+    }
+    
+    public void setBudget(double budget){
+        this.budget=budget;
+    }
+     public double getBudget(){
+        return budget;
+    }
+    
+    
+    
+    
+}
+
+//main class
+public class FinalProject9 {
+
+    public static void main(String[] args) throws java.io.IOException {
+  //arraylists to store the information from the text files
+        List<Instructor> instr = new ArrayList<>();
+        List<Department> dept = new ArrayList<>();
+
+            //reading info from text files and adding it to corresponding arraylist
+            File file1 = new File("/Users/aldonaneziraj/Desktop/department.txt");
+            Scanner input1 = new Scanner(file1); 
+            while (input1.hasNextLine()) {
+                String []info = input1.nextLine().split(",");
+                String d_name = info[0];
+                String location = info[1];
+                double budget = Double.parseDouble(info[2]);
+                //creating new department object
+                Department department = new Department(d_name,location,budget);
+                //adding this department to the arraylist
+                dept.add(department);
+            }
+            input1.close();
+        
+        
+        
+
+            //reading info from text files and adding it to corresponding arraylist
+       
+            File file2 = new File("/Users/aldonaneziraj/Desktop/instructor.txt");
+            Scanner input2 = new Scanner(file2);
+            while (input2.hasNextLine()) {
+                String[] info = input2.nextLine().split(",");
+                int id = Integer.parseInt(info[0]);
+                String name = info[1];
+                String department = info[2];
+                //creating new instructor object
+                Instructor instructor = new Instructor(id,name,department);
+                //adding this instructor to the arraylist
+                instr.add(instructor);
+            }
+            input2.close();
+       
+            
+            
+            
+            
+            
+            
+          
+            //takes user’s inputs
+        Scanner input = new Scanner(System.in);
+
+          ///while loops that displays the menu until user chooses option 3
+        while (true){
+            
+            System.out.println("Menu: ");
+            System.out.println("1. Enter the instructor ID and I will provide  you with the name of the instructor ,affiliated department and the location of that department");
+            System.out.println("2. Insert  record about a new instructor.");
+            System.out.println("3. Exit");
+            System.out.println("Choose an option from the menu: ");
+
+            int option = input.nextInt();
+            switch (option) {
+                case 1:
+                    System.out.print("Enter instructor id: ");
+                    int id = input.nextInt();
+                    input.nextLine();
+                   
+                    // checks if the entered id is equal to an id in the text file
+                    Instructor instructor = null;
+                    for (Instructor i : instr) {  
+                        if(i.getId()==id){ // 
+                          instructor=i;
+                           break;
+                        }
+                    }
+                    
+                    
+                    if (instructor == null) {
+                        System.out.println("The id does not exist .");
+                    } else {
+                     //if id is found, then it prints the additional information
+                        for (Department d : dept) { 
+                            
+                            if (d.getd_Name().equals(instructor.getDept())) {
+                                System.out.println("Instructor name: " + instructor.getName());
+                                System.out.println("Department name: " + instructor.getDept());
+                                System.out.println("Department location: " + d.getLocation());
+                               
+                            }
+                        }
+                    }
+                    break;
+                   
+                
+                case 2 : 
+                    
+                   System.out.println("Enter instructor id:");
+                   int user_id=input.nextInt(); 
+                   input.nextLine();
+                   boolean id_inFile =false;
+                
+                 
+                   //checks if the entered id corresponds to an id in the text file 
+                   for (Instructor i: instr) { 
+                        if(i.getId()==user_id){
+                            id_inFile=true;
+                              }
+                   }
+                   
+                    //if id is found in file, it doesn't let you add the record to the text file
+                    if(id_inFile){
+                        System.out.println("ID  already exists in the file");
+                     break;
+                   
+                    }
+                   
+                   System.out.println("Enter instructor name");
+                   String user_name =input.nextLine(); 
+                   
+                   
+                   
+                   System.out.println("Enter department name:");
+                   String user_dept=input.nextLine();
+                   boolean dept_inFile=false;
+                  
+                   
+                   
+               //compares the entered department to departments in file
+                   for(Department d:dept){ //          
+                       if(d.getd_Name().equals(user_dept)){ 
+                           dept_inFile=true;
+                           break;
+                       }
+                   }
+                  
+                   //if the department exists , then it adds the records entered from the user to the file
+                    if(dept_inFile){
+                        Instructor new_i=new Instructor(user_id,user_name,user_dept);
+                        instr.add(new_i);
+                        FileWriter fw = new FileWriter(file2, true); 
+                        PrintWriter output = new PrintWriter(fw);
+                        String o= "\n"+user_id+","+user_name+","+user_dept;
+                        output.write(o);
+                        output.close();
+                        System.out.println("Open the file to check for the added record ");
+                    }
+                    else {
+                        //if deppartment doesn't exist, it does not add the records to the text file
+                        System.out.println("Department does not exist therefore the new record cannot be added to the file");
+
+                            }
+                    
+                     break;   
+                
+                   
+                    //exits 
+                case 3:
+                    System.exit(0);
+                    
+               
+            }
+          
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
