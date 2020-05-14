@@ -128,7 +128,7 @@ mydb.commit()
 
 
 answer=0
-while answer!=5:
+while answer!=4:
 ##Provides the user with the menu :
     print ("1.Make changes in the database:")
     print("2.Enter the department name you would like to delete:")
