@@ -1,0 +1,208 @@
+''' Design a database for a Bank (based on your ER diagram and relational schema).Your program should handle the wrong user entries and display appropriate error messages and then continue with the program in a logical way. Your program should also run in a loop until the user selects the quit option.
+You will create the database and the tables from your code.
+Each of your tables should hold 10 rows of data. You can use insert statements in your code to add data to the tables (no file reading required).
+The user menu should provide at least five options to the user.
+One menu option should modify the data in the tables.
+One menu option should delete some data in the tables.
+One menu option should insert new data in the tables.
+One menu option should let the user quit the program.  '''
+
+
+import csv
+import mysql.connector
+
+mydb = mysql.connector.connect(
+host="localhost",
+user="root",
+passwd="root"
+)
+
+mycursor = mydb.cursor()
+
+#Creates and uses the database
+#mycursor.execute( "DROP DATABASE bank") 
+mycursor.execute( "CREATE DATABASE bank") 
+mycursor.execute("USE bank")
+
+#Creates tables from my ER diagram and relational schema
+mycursor.execute("CREATE TABLE branch (branch_id int PRIMARY KEY,branch_name varchar(25),location varchar (25))")
+mycursor.execute("CREATE TABLE department (dept_name varchar (20),personnel_no varchar(25),office_no varchar (25),PRIMARY KEY (dept_name))")
+mycursor.execute("CREATE TABLE staff (staff_id varchar(25),dept_name varchar(25),salary varchar(15),PRIMARY KEY(staff_id),FOREIGN KEY(dept_name)references department(dept_name))")
+mycursor.execute("CREATE TABLE customer(SSN varchar(85),customer_name varchar(25),customer_id varchar (25),PRIMARY KEY(SSN)")
+mycursor.execute( "CREATE TABLE account(account_number int PRIMARY KEY,account_amount varchar(25),date_joined varchar(25))")
+mycursor.execute("CREATE TABLE loan (loan_id int PRIMARY KEY,loan_amount varchar(25),branch_id varchar (12))")
+mycursor.execute( "CREATE TABLE borrower (loan_id int PRIMARY KEY,ssn int)")
+
+#inserts values into the Branch table 
+mycursor.execute("INSERT INTO branch values('1001', 'TDB', '23 W 56th st')")
+mycursor.execute("INSERT INTO branch values('1002', 'PNC', '49 E 26th st')")
+mycursor.execute("INSERT INTO branch values('1003', 'LDI', '16 E 62nd st')")
+mycursor.execute("INSERT INTO branch values('1004', 'NRM', '10 W 9th st')")
+mycursor.execute("INSERT INTO branch values('1005', 'NOB', '96 E 4th st')")
+mycursor.execute("INSERT INTO branch values('1006', 'ALD', '22 E 86th st')")
+mycursor.execute("INSERT INTO branch values('1007', 'ONA', '457 W 41st st')")
+mycursor.execute("INSERT INTO branch values('1008', 'NEZ', '632 E 35th st')")
+mycursor.execute("INSERT INTO branch values('1009', 'IRA', '125 E 10th st')")
+mycursor.execute("INSERT INTO branch values('1010', 'JAL', '99 E 69th st')")
+
+
+#inserts values into the Department table 
+mycursor.execute("INSERT INTO department values('Operations', 20, '101')")
+mycursor.execute("INSERT INTO department values('IT', 22, '102')")
+mycursor.execute("INSERT INTO department values('HR',19, '103')") 
+mycursor.execute("INSERT INTO department values('Finance', 20,'104')")
+mycursor.execute("INSERT INTO department values('Management',5, '105')")
+mycursor.execute("INSERT INTO department values('Customer Service',15, '106')")
+mycursor.execute("INSERT INTO department values('Audit',3, '107')")
+mycursor.execute("INSERT INTO department values('Inspection',3, '108')")
+mycursor.execute("INSERT INTO department values('Corporate', 9, '109')")
+mycursor.execute("INSERT INTO department values('Security', 10, '200')")
+
+
+
+#Inserts information into Staff table
+mycursor.execute("INSERT INTO staff values('1011', 'IT', 60000)")
+mycursor.execute("INSERT INTO staff values('1012', 'Operations', 50000)")
+mycursor.execute("INSERT INTO staff values('1013', 'Audit', 55000)")
+mycursor.execute("INSERT INTO staff values('1014', 'Inspection', 65000)")
+mycursor.execute("INSERT INTO staff values('1015', 'Finance', 80900)")
+mycursor.execute("INSERT INTO staff values('1016', 'Security', 82000)")
+mycursor.execute("INSERT INTO staff values('1017', 'Management', 90000)")
+mycursor.execute("INSERT INTO staff values('1018', 'Customer Service', 55800)")
+mycursor.execute("INSERT INTO staff values('1019', 'Corporate', 73000)")
+mycursor.execute("INSERT INTO staff values('1020', 'HR', 70000)")
+
+
+
+#Inserts values into Customer table
+mycursor.execute("INSERT INTO customer values('235996172', 'Dona Neziraj' , '991')")
+mycursor.execute("INSERT INTO customer values('125234150', 'Ronaldo Neziraj','992')")
+mycursor.execute("INSERT INTO customer values('349343523', 'Bardha Neziraj','993')")
+mycursor.execute("INSERT INTO customer values('354345543', 'Ibrahim Neziraj','994')")
+mycursor.execute("INSERT INTO customer values('213542234', 'Melissa Mema','995')")
+mycursor.execute("INSERT INTO customer values('333235345', 'Ketlin Sinamati','996')")
+mycursor.execute("INSERT INTO customer values('545231133', 'Desira Kola','997')")
+mycursor.execute("INSERT INTO customer values('543558654', 'Mersilda Nik','998')")
+mycursor.execute("INSERT INTO customer values('456760795', 'Sila Sh','999')")
+mycursor.execute("INSERT INTO customer values('940342366', 'Er Aliaj','1000')")
+
+
+#Inserts information into Account table
+mycursor.execute("INSERT INTO account values('991', 4983308.00, '2010-09-01')")
+mycursor.execute("INSERT INTO account values('992', 37123743.00, '2003-01-07')")
+mycursor.execute("INSERT INTO account values('993', 8743123987.00, '2001-09-23')")
+mycursor.execute("INSERT INTO account values('994', 2487276.00, '2007-05-19')")
+mycursor.execute("INSERT INTO account values('995', 19387326.00, '2018-11-29')")
+mycursor.execute("INSERT INTO account values('996', 1,564,239,473.00, '2019-02-07')")
+mycursor.execute("INSERT INTO account values('997', 879997.00, '2016-03-02')")
+mycursor.execute("INSERT INTO account values('998', 378589.00, '2012-03-09')")
+mycursor.execute("INSERT INTO account values('999', 732334.00, '2010-03-15')")
+mycursor.execute("INSERT INTO account values('1000', 5644575.00, '2014-10-11')")
+
+#Inserts information into loan table
+mycursor.execute("INSERT INTO loan values('0001', 4983308, '1001')")
+mycursor.execute("INSERT INTO loan values('0002', 37123743, '1002')")
+mycursor.execute("INSERT INTO loan values('0003', 8743123987, '1003')") 
+mycursor.execute("INSERT INTO loan values('0004', 2487276, '1004')")
+mycursor.execute("INSERT INTO loan values('0005', 19387326, '1005')")
+mycursor.execute("INSERT INTO loan values('0005', 1,564,239,473, '1006')")
+mycursor.execute("INSERT INTO loan values('0006', 879997,'1007')")
+mycursor.execute("INSERT INTO loan values('0007',378589,'1008')")
+mycursor.execute("INSERT INTO loan values('0008',832334,'1009')")
+mycursor.execute("INSERT INTO loan values('0009',5644575,'1010')")
+
+#Inserts values into the borrowers table
+mycursor.execute("INSERT INTO borrower values('0001', '235996172')")
+mycursor.execute("INSERT INTO borrower values('0002', '125234150')")
+mycursor.execute("INSERT INTO borrower values('0003', '349343523')")  
+mycursor.execute("INSERT INTO borrower values('0004', '354345543')")
+mycursor.execute("INSERT INTO borrower values('0005', '213542234')")
+mycursor.execute("INSERT INTO borrower values('0005', '333235345')")
+mycursor.execute("INSERT INTO borrower values('0006', '545231133')")
+mycursor.execute("INSERT INTO borrower values('0007', '543558654')")
+mycursor.execute("INSERT INTO borrower values('0008', '456760795')")
+mycursor.execute("INSERT INTO borrower values('0009', '940342366')")
+
+
+mydb.commit()
+
+
+answer=0
+while answer!=5:
+##Provides the user with the menu :
+    print ("1.Make changes in the database:")
+    print("2.Enter the department name you would like to delete:")
+    print("3.Insert records about a new employee:")
+    print("4. Enter customer_id to know the amount in the customer’s account :")
+    print("5.Quit")
+
+    answer=int(input())
+    #If the answer is not one of the options from the menu, then the user will get an error
+    while answer < "0" or answer > "5" : 
+        answer= input ( "You have entered an invalid option. Please select another option :")
+#If answer 1 is chosen, the user will be asked to provide the information he wants to change and the information will then be updated.
+    if answer == 1: 
+        print("[1]")
+        b_location= input("Enter branch location:") 
+        new_location= input("Enter the new location:")
+        sql="""UPDATE branch SET location =%s' WHERE location = %s"""
+        values =(new_location,b_location)
+        mycursor.execute(sql,values)
+        mydb.commit()
+        print("Branch location has been updated.\n")
+ 
+
+#If answer 2 is chosen, the user will be asked to enter the value he wants to delete , if the user’s choice is valied,the value will be deleted , otherwise the user will get an error.
+    elif answer == 2: 
+        print("[2]")
+        delete_dept=input("Enter the department name you would like to delete:")
+        flag = True 
+        sql1 =("SELECT * FROM department where dept_name = %s " )
+        mycursor.execute(sql1,(delete_dept,))
+        result = mycursor.fetchall()
+        
+        if mycursor.count == 0: 
+            print ("This department does not exist.")
+            flag = False
+        if flag: 
+            sql1= ("DELETE from department where dept_name= %s " )
+            mycursor.execute (sql1,(delete_dept,))
+            mydb.commit()
+            print ("The department has been deleted from the database.\n") 
+
+#If answer 3 is chosen, the user will input records about the new employee he wants to add,if input is valid, record will be added, otherwise record already exists in the database or it’s an invalid input.
+    elif answer == "3" : 
+        print("[3]")
+        flag = True
+        new_id =input(" Enter new staff ID :")
+
+        sql2 = ("SELECT * FROM staff WHERE staff_id = %s " )
+        mycursor.execute(sql2,(new_id))
+        result = mycursor.fetchall()
+        
+        if mycursor.rowcount!= 0 :
+            print("Record already exists")
+            flag = False
+            continue
+        new_salary = input(" Enter salary :")
+        new_dept = input("Enter department_name:")
+
+        if flag:
+            sql3="""insert INTO staff (insert_id, insert_salary, insert_dept) VALUES (%s, %s, %s)"""
+            val=(new_id,new_salary,new_dept)
+            mycursor.execute(sql3,val)
+            mydb.commit()
+            print ("The record about new staff employee has been added.")
+        
+
+#If answer 4 is chosen, the user will exit the database.
+    elif answer== 4 :
+        mycursor.execute("DROP DATABASE bank")
+        mydb.commmit()
+        print("[5]")
+        print("Quitting database...Goodbye:)")
+        exit() 
+    else:
+        print("Enter a valid answer:")
+
+
