@@ -1,0 +1,162 @@
+
+
+'''   There are two text files with the following information stored in them:
+The instructor.txt file where each line stores the id, name and affiliated department of an instructor separated by a comma
+The department.txt file where each line stores the name, location and budget of the department separated by a comma
+You need to write a Python program that creates a university database with two tables - instructor and department.
+The instructor table will have three columns - id, name and dept_name
+The department table will have three columns - dept_name, location, budget.
+Use appropriate type for the above attributes and also specify all relevant primary and foreign keys.
+Your Python program will then read the two provided text files (instructor and department) and store the information from those files into their respective tables in the database.
+You will now provide the user with the following menu:
+1. Enter the instructor ID and I will provide you with the name of the instructor, affiliated department and the location of that department.
+2. Enter the department name and I will provide you with the location, budget and names of all instructors that work for the department.
+3. Insert a record about a new instructor.
+4. Delete a record about an instructor
+5. Exit
+The above menu should continue to be displayed in a loop until the user selects option 5.
+When the user selects option 1 above, the following should be displayed:
+Enter the instructor ID:
+If the user enters an instructor id that is not present in the database, display "The ID doesnot appear in the database.", otherwise, display the name of the instructor, affiliated department and the location of that department.
+When the user selects option 2 above, the following should be displayed:
+Enter the department name:
+If the user enters a name that is not present in the database, display "The department name doesnot appear in the database.", otherwise, display the location, budget and names of all instructors that work for the department.
+If the user selects option 3 above, display the following:
+Enter the instructor id:
+Enter the instructor name:
+Enter the affiliated department name:
+Once the user enters the above information, store the information in the instructor table only if the following two conditions are met: 1. The department already exists in the department table. If not, display "The department does not exist and hence the instructor record cannot be added to the database". 2. The instructor id should not already be present in the database. If so, display "Instructor id already exists in the database."
+If the user selects option 4 above, display the following:
+Enter the instructor id:
+If the user entered id exists in the database, delete the information about that instructor from the database. If the id does not exist in the database, then display "The ID doesnot appear in the database."
+If the user selects option 5, your loop should stop.   '''
+
+
+
+import csv
+import sys
+import mysql.connector
+instructor=open("Path for instructor.txt PATH","r") 
+department=open("Path for department.txt PATH","r") 
+
+mydatabase = mysql.connector.connect(
+  host="localhost",
+  user="root",
+  passwd="root"
+)
+mycursor = mydatabase.cursor()
+
+mycursor.execute("DROP DATABASE mydatabase")
+mycursor.execute("CREATE DATABASE mydatabase")
+mycursor.execute("use mydatabase")
+
+
+mycursor.execute("CREATE TABLE Department (Dept_name VARCHAR(255), location VARCHAR(255), Budget int, PRIMARY KEY (Dept_name))")
+mycursor.execute("CREATE TABLE Instructor (ID VARCHAR(20), name VARCHAR(255), Dept_name VARCHAR(255), PRIMARY KEY (ID), FOREIGN KEY (Dept_name) references Department (Dept_name))")
+
+try:
+    reader = csv.reader(department)
+    for row in reader:
+            dept_name=row[0]
+            location=row[1]
+            budget=row[2]
+            
+            mycursor.execute("insert into Department values('"+dept_name+"','"+location+"','"+budget+"')")
+finally:
+    department.close()
+
+try:
+    reader = csv.reader(instructor)
+    for row in reader:
+            ID=row[0]
+            Name=row[1]
+            Dept_name=row[2]
+            
+            mycursor.execute("insert into Instructor values('"+ID+"','"+Name+"','"+Dept_name+"')")
+finally:
+    instructor.close()
+
+    
+answer=1
+while answer!="5":
+    print("1. Enter the instructor ID and I will provide you with the name of the instructor, affiliated department and the location of that department.")
+    print("2. Enter the department name and I will provide you with the location, budget and names of all instructors that work for the department.")
+    print("3. Insert a record about a new instructor.")
+    print("4. Delete a record of an instructor.")
+    print("5. Exit")
+    answer=input("Please make a selection:")
+    while answer <"0" or answer>"5":
+        answer=input("Invalid selection has been made! Please select again: ")
+    if answer == "1":
+        id=input("Enter the Instructors ID number:")
+        mycursor.execute("SELECT name, Dept_name,location FROM Instructor natural join department WHERE ID ='"+id+"' ")
+        records = mycursor.fetchall()
+        if len(records)!=0:
+            for row in records:
+                print(f"Name: {row[0]}")
+                print(f"Department: {row[1]}")
+                print(f"Location: {row[2]}")
+
+        else:
+            print("No Instructor found")
+    elif answer=="2":
+        dept=input("Enter the department name:")
+
+        mycursor.execute("SELECT location, Budget FROM Department WHERE Dept_name ='"+dept+"' ")
+        records = mycursor.fetchall()
+        if len(records)!=0:
+            for row in records:
+                print(f"Location: {row[0]}")
+                print(f"Budget: {row[1]}")
+            
+            mycursor.execute("SELECT name FROM Instructor WHERE Dept_name ='"+dept+"' ")
+            records = mycursor.fetchall()
+            if len(records)!=0:
+                print("Instructors:")
+                for row in records:
+                    print(row[0])
+
+            else:
+                print("No Instructors found")
+        else:
+            print("This Department does not exist")
+    elif answer=="3":
+        newID=input("Enter the instructors ID: ")
+        newName=input("Enter the instructors name: ")
+        newDept=input("Enter the affiliated department name: ")
+        mycursor.execute("SELECT Dept_name FROM Department WHERE Dept_name ='"+NewDept+"' ")  
+        records = mycursor.fetchall()
+        if len(records)!=0:
+            mycursor.execute("SELECT ID FROM Instructor WHERE ID ='"+newID+"' ")
+            records = mycursor.fetchall()
+            if len(records)==0:
+                mycursor.execute("insert into Instructor values('"+newID+"','"+newName+"','"+newDept+"')")
+                print("Instructor has been added to database.")
+            else:
+                print("This Instructor ID already exists")
+                
+
+        else:
+            print("This Department does not exist.")
+            
+
+        
+    elif answer=="4":
+        deleteID=input("Enter the instructor ID: ")
+        mycursor.execute("SELECT ID FROM Instructor WHERE ID ='"+deleteID+"' ")
+        records = mycursor.fetchall()
+        if len(records)!=0:
+            mycursor.execute("DELETE FROM Instructor WHERE ID ='"+deleteID+"' ")
+            print("Instructor has been removed from the database")
+        else:
+            print("This Instructor does not exist")
+    
+    print("\n")
+
+
+
+
+if (mydatabase):
+    print("Quitting databse...Goodbye")
+    mydatabase.close()
+
