@@ -57,7 +57,7 @@ public class aldonastwitter {
        wordCloud.setColorPalette(new ColorPalette(Color.PINK, Color.WHITE, Color.RED, Color.WHITE));
        wordCloud.setFontScalar(new LinearFontScalar(20, 49));
        wordCloud.build(wordFrequencies);
-       wordCloud.writeToFile("/Users/aldonaneziraj/Desktop/wordcloud2.png");
+       wordCloud.writeToFile("Path of directory where wordcloud.png will be saved");
        }
    }
 
