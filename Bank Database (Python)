@@ -1,11 +1,11 @@
-#Design a database for a Bank (based on your ER diagram and relational schema).Your program should handle the wrong user entries and display appropriate error messages and then continue with the program in a logical way. Your program should also run in a loop until the user selects the quit option.
-#You will create the database and the tables from your code.
-#Each of your tables should hold 10 rows of data. You can use insert statements in your code to add data to the tables (no file reading required).
-#The user menu should provide at least five options to the user.
-#One menu option should modify the data in the tables.
-#One menu option should delete some data in the tables.
-#One menu option should insert new data in the tables.
-#One menu option should let the user quit the program.
+'''Design a database for a Bank (based on your ER diagram and relational schema).Your program should handle the wrong user entries and display appropriate error messages and then continue with the program in a logical way. Your program should also run in a loop until the user selects the quit option.
+You will create the database and the tables from your code.
+Each of your tables should hold 10 rows of data. You can use insert statements in your code to add data to the tables (no file reading required).
+The user menu should provide at least five options to the user.
+One menu option should modify the data in the tables.
+One menu option should delete some data in the tables.
+One menu option should insert new data in the tables.
+One menu option should let the user quit the program.'''
 
 
 import csv
