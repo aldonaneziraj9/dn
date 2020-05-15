@@ -1,11 +1,11 @@
-''' Design a database for a Bank (based on your ER diagram and relational schema).Your program should handle the wrong user entries and display appropriate error messages and then continue with the program in a logical way. Your program should also run in a loop until the user selects the quit option.
-You will create the database and the tables from your code.
-Each of your tables should hold 10 rows of data. You can use insert statements in your code to add data to the tables (no file reading required).
-The user menu should provide at least five options to the user.
-One menu option should modify the data in the tables.
-One menu option should delete some data in the tables.
-One menu option should insert new data in the tables.
-One menu option should let the user quit the program.  '''
+#Design a database for a Bank (based on your ER diagram and relational schema).Your program should handle the wrong user entries and display appropriate error messages and then continue with the program in a logical way. Your program should also run in a loop until the user selects the quit option.
+#You will create the database and the tables from your code.
+#Each of your tables should hold 10 rows of data. You can use insert statements in your code to add data to the tables (no file reading required).
+#The user menu should provide at least five options to the user.
+#One menu option should modify the data in the tables.
+#One menu option should delete some data in the tables.
+#One menu option should insert new data in the tables.
+#One menu option should let the user quit the program.
 
 
 import csv
@@ -136,15 +136,13 @@ while answer!=4:
     print("4.Quit")
 
     answer=int(input())
-    #If the answer is not one of the options from the menu, then the user will get an error
-    while answer < "0" or answer > "4" : 
-        answer= input ( "You have entered an invalid option. Please select another option :")
-#If answer 1 is chosen, the user will be asked to provide the information he wants to change and the information will then be updated.
+    
+    #If answer 1 is chosen, the user will be asked to provide the information he wants to change and the information will then be updated.
     if answer == 1: 
         print("[1]")
         b_location= input("Enter branch location:") 
         new_location= input("Enter the new location:")
-        sql="""UPDATE branch SET location =%s' WHERE location = %s"""
+        sql="""UPDATE branch SET location =%s WHERE location = %s"""
         values =(new_location,b_location)
         mycursor.execute(sql,values)
         mydb.commit()
@@ -156,7 +154,7 @@ while answer!=4:
         print("[2]")
         delete_dept=input("Enter the department name you would like to delete:")
         flag = True 
-        sql1 =("SELECT * FROM department where dept_name = %s " )
+        sql1 ="""SELECT * FROM department where dept_name = %s """ 
         mycursor.execute(sql1,(delete_dept,))
         result = mycursor.fetchall()
         
@@ -164,7 +162,7 @@ while answer!=4:
             print ("This department does not exist.")
             flag = False
         if flag: 
-            sql1= ("DELETE from department where dept_name= %s " )
+            sql1= """DELETE from department where dept_name= %s """
             mycursor.execute (sql1,(delete_dept,))
             mydb.commit()
             print ("The department has been deleted from the database.\n") 
@@ -174,8 +172,7 @@ while answer!=4:
         print("[3]")
         flag = True
         new_id =input(" Enter new staff ID :")
-
-        sql2 = ("SELECT * FROM staff WHERE staff_id = %s " )
+        sql2 = """SELECT * FROM staff WHERE staff_id = %s """
         mycursor.execute(sql2,(new_id))
         result = mycursor.fetchall()
         
@@ -187,9 +184,9 @@ while answer!=4:
         new_dept = input("Enter department_name:")
 
         if flag:
-            sql3="""insert INTO staff (insert_id, insert_salary, insert_dept) VALUES (%s, %s, %s)"""
+            sql2="""insert INTO staff (insert_id, insert_salary, insert_dept) VALUES (%s, %s, %s)"""
             val=(new_id,new_salary,new_dept)
-            mycursor.execute(sql3,val)
+            mycursor.execute(sql2,val)
             mydb.commit()
             print ("The record about new staff employee has been added.")
         
@@ -203,5 +200,3 @@ while answer!=4:
         exit() 
     else:
         print("Enter a valid answer:")
-
-
